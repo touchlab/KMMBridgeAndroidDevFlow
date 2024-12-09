@@ -11,6 +11,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import co.touchlab.kmp.devflow.kmplib.whoAmIm
 import co.touchlab.kmp.devflow.ui.theme.DevFlowTheme
 
 class MainActivity : ComponentActivity() {
@@ -21,7 +22,7 @@ class MainActivity : ComponentActivity() {
             DevFlowTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     Greeting(
-                        name = "Android",
+                        name = whoAmIm(),
                         modifier = Modifier.padding(innerPadding)
                     )
                 }
