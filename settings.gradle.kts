@@ -19,6 +19,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DevFlow"
 include(":kmplib")
 include(":app")
