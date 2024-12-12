@@ -10,4 +10,8 @@ fun whoAmIm():String {
 
 object SomethingElse {
     val arst = "tttok2"
+
+    fun hello() {
+        println("Hello from SomethingElse")
+    }
 }
