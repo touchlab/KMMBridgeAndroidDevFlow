@@ -9,5 +9,5 @@ fun whoAmIm():String {
 }
 
 object SomethingElse {
-    val arst = "tttok"
+    val arst = "tttok2"
 }
