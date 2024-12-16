@@ -22,13 +22,18 @@ jobs:
           file: ./gradle.properties
           property: LIBRARY_VERSION
 
+      - name: Apply SSH Key
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.KMMBRIDGE_SSH_KEY }}
+
       - uses: actions/setup-java@v2
         with:
           distribution: "adopt"
           java-version: 17
 
-      - name: Validate Gradle Wrapper
-        uses: gradle/wrapper-validation-action@v1
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
 
       - name: Cache build tooling
         uses: actions/cache@v3
@@ -43,16 +48,24 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           draft: true
+          repository: touchlab/KMMBridgeAndroidDevFlowPublish
+          token: ${{ secrets.KMMBRIDGE_PAT_SECRET }}
           tag_name: ${{ steps.versionPropertyValue.outputs.propVal }}
 
       - name: Build Main
-        run: ./gradlew kmmBridgePublish -PENABLE_PUBLISHING=true -PGITHUB_ARTIFACT_RELEASE_ID=${{ steps.devrelease.outputs.id }} -PGITHUB_PUBLISH_TOKEN=${{ secrets.GITHUB_TOKEN }} -PGITHUB_REPO=${{ github.repository }} --no-configuration-cache --no-daemon --info --stacktrace
+        run: |
+          ./gradlew kmmBridgePublish \
+            -PENABLE_PUBLISHING=true \
+            -PGITHUB_ARTIFACT_RELEASE_ID=${{ steps.devrelease.outputs.id }} \
+            -PGITHUB_PUBLISH_TOKEN=${{ secrets.KMMBRIDGE_PAT_SECRET }} \
+            -PGITHUB_REPO=touchlab/KMMBridgeAndroidDevFlowPublish \
+            --no-daemon --info --stacktrace
         env:
           GRADLE_OPTS: -Dkotlin.incremental=false -Dorg.gradle.jvmargs="-Xmx3g -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -XX:MaxMetaspaceSize=512m"
 
-      - uses: touchlab/ga-update-release-tag@v1
-        id: update-release-tag
+      - uses: touchlab/ga-push-remote-swift-package@v1.1
+        id: push-remote-swift-package
         with:
-          commitMessage: "KMP SPM package release for ${{ steps.versionPropertyValue.outputs.propVal }}"
-          tagMessage: "KMP release version ${{ steps.versionPropertyValue.outputs.propVal }}"
-          tagVersion: ${{ steps.versionPropertyValue.outputs.propVal }}
+          commitMessage: "KMP SPM package debug build for ${{ github.ref }}"
+          remoteRepo: touchlab/KMMBridgeAndroidDevFlowPublish
+          remoteBranch: ${{ github.ref }}

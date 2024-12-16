@@ -26,9 +26,6 @@ jobs:
         id: output
         run: echo "${{ steps.versionPropertyValue.outputs.propVal }}"
 
-      - name: Touchlab Sample Sanity Check (Ignore this for your CI)
-        uses: touchlab/sample-group-sanity-check@main
-
       - name: Apply SSH Key
         uses: webfactory/ssh-agent@v0.5.4
         with:
