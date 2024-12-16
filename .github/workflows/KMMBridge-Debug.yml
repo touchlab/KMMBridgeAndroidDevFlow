@@ -56,7 +56,7 @@ jobs:
         with:
           draft: true
           token: ${{ secrets.GITHUB_TOKEN }}
-          tag_name: "${{ steps.versionPropertyValue.outputs.propVal }}"
+          tag_name: "dev-${{ steps.versionPropertyValue.outputs.propVal }}"
 
       - id: trimcommit
         uses: prompt/actions-commit-hash@v3
